@@ -16,7 +16,6 @@ module.exports = {
     },
     useNullAsDefault: true
   },
-
   test: {
     client: "pg",
     connection: "postgres://localhost:5432/pinlatino",

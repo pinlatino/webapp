@@ -18,6 +18,8 @@ const app = next({
 });
 const handle = app.getRequestHandler();
 
+console.log("db url", process.env.DATABASE_URL);
+
 app.prepare().then(() => {
   const server = express();
 
