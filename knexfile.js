@@ -27,10 +27,20 @@ module.exports = {
     },
     useNullAsDefault: true
   },
-
+  heroku: {
+    client: "pg",
+    connection: process.env.DATABASE_URL,
+    migrations: {
+      directory: "./db/migrations"
+    },
+    seeds: {
+      directory: "./db/seeds/production"
+    },
+    useNullAsDefault: true
+  },
   production: {
     client: "pg",
-    connectionString: process.env.DATABASE_URL,
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: "./db/migrations"
     },
