@@ -19,9 +19,7 @@ const AuthForm = ({ onSuccess, isLogin = true }) => {
   const onSubmit = e => {
     e.preventDefault();
     console.log("submitting");
-    const URL = isLogin
-      ? "http://localhost:3000/api/login"
-      : "http://localhost:3000/api/signup";
+    const URL = isLogin ? "/api/login" : "/api/signup";
     fetch(URL, {
       method: "POST",
       body: JSON.stringify({
