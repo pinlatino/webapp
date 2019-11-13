@@ -101,7 +101,7 @@ const Home = ({ businesses, router, authenticated }) => {
 
 Home.getInitialProps = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/businesses");
+    const response = await fetch("/api/businesses");
     console.log("response", response);
     const businesses = await response.json();
 
