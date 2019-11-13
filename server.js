@@ -6,7 +6,7 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 // 1 - importing dependencies
 const passport = require("passport");
-const Auth0Strategy = require("passport-auth0");
+// const Auth0Strategy = require("passport-auth0");
 const uid = require("uid-safe");
 const authRoutes = require("./server/auth-routes");
 const businessesAPI = require("./server/businesses");
@@ -17,8 +17,6 @@ const app = next({
   dev
 });
 const handle = app.getRequestHandler();
-
-console.log("db url", process.env.DATABASE_URL);
 
 app.prepare().then(() => {
   const server = express();
