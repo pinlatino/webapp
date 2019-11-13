@@ -39,7 +39,7 @@ router.get("/api/getuser", (req, res) => {
 
 router.post("/api/sign-up", passport.authenticate("local"));
 
-router.get(
+/* router.get(
   "/api/login",
   passport.authenticate("auth0", {
     scope: "openid email profile"
@@ -65,6 +65,6 @@ router.get("/api/logout", (req, res) => {
   res.redirect(
     `https://${AUTH0_DOMAIN}/logout?client_id=${AUTH0_CLIENT_ID}&returnTo=${BASE_URL}`
   );
-});
+}); */
 
 module.exports = router;
