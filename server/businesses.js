@@ -11,6 +11,7 @@ const businesses = [
 ];
 
 function ensureAuthenticated(req, res, next) {
+  console.log("req.isAuthenticated()", req.isAuthenticated());
   if (req.isAuthenticated()) return next();
   res.send(401);
 }
