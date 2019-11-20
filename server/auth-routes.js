@@ -7,22 +7,25 @@ const router = express.Router();
 
 const createUser = req => {
   const salt = bcrypt.genSaltSync();
-  const { username, password } = req.body;
-  console.log("username, password", username, password);
+  const { firstname, lastname, email, password, country } = req.body;
   const hash = bcrypt.hashSync(password, salt);
-  return user.insertUser({ username, password: hash });
+  return user.insertUser({
+    email,
+    password: hash,
+    firstname,
+    lastname,
+    country,
+    tier: 1
+  });
 };
 
 router.post("/api/signup", (req, res) => {
-  console.log("api signup", req.body);
   createUser(req).then(response => {
     return res.send(response);
   });
 });
 
 router.post("/api/login", passport.authenticate("local-login"), (req, res) => {
-  console.log("login", req.body);
-  console.log("login res session", req.session);
   const {
     passport: { user }
   } = req.session;
@@ -30,11 +33,12 @@ router.post("/api/login", passport.authenticate("local-login"), (req, res) => {
 });
 
 router.get("/api/getuser", (req, res) => {
-  const response = user.getFirst();
-  console.log("response", response);
-  response.then(data => {
-    res.send(data);
-  });
+  if (req.session && req.session.passport && req.session.passport.user) {
+    console.log("get user", req.session.passport.user);
+    res.send(req.session.passport.user);
+  } else {
+    res.status(401).send("not authorized");
+  }
 });
 
 router.post("/api/sign-up", passport.authenticate("local"));

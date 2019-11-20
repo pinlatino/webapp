@@ -2,10 +2,14 @@ exports.up = function(knex) {
   return knex.schema.createTable("users", table => {
     table.increments();
     table
-      .string("username")
+      .string("email")
       .unique()
       .notNullable();
+    table.string("firstname").notNullable();
+    table.string("lastname").notNullable();
     table.string("password").notNullable();
+    table.string("country").notNullable();
+    table.integer("tier").notNullable();
     table
       .boolean("admin")
       .notNullable()
@@ -14,6 +18,8 @@ exports.up = function(knex) {
       .timestamp("created_at")
       .notNullable()
       .defaultTo(knex.raw("now()"));
+
+    table.timestamp("deleted_at").defaultTo(null);
   });
 };
 

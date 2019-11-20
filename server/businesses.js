@@ -1,14 +1,10 @@
 const bodyParser = require("body-parser");
 const express = require("express");
+const business = require("../db/business");
 
 const router = express.Router();
 
 router.use(bodyParser.json());
-
-const businesses = [
-  { _id: 123, message: "I love pepperoni pizza!", author: "unknown" },
-  { _id: 456, message: "I'm watching Netflix.", author: "unknown" }
-];
 
 function ensureAuthenticated(req, res, next) {
   console.log("req.isAuthenticated()", req.isAuthenticated());
@@ -16,20 +12,30 @@ function ensureAuthenticated(req, res, next) {
   res.send(401);
 }
 
-router.get("/api/businesses", ensureAuthenticated, (req, res) => {
-  const orderedBusinesses = businesses.sort((t1, t2) => t2._id - t1._id);
-  res.send(orderedBusinesses);
+router.get("/api/businesses", (req, res) => {
+  business.getBusinesses().then(businesses => {
+    res.send(businesses);
+  });
 });
 
 router.post("/api/businesses", ensureAuthenticated, (req, res) => {
-  const { message } = req.body;
-  const newBusiness = {
-    _id: new Date().getTime(),
-    message,
-    author: "unknown"
+  const {
+    passport: { user }
+  } = req.session;
+  console.log("user", user);
+  const businessData = {
+    ...req.body,
+    ...{
+      userid: user.id,
+      facebook_url: req.body.facebook,
+      instagram_url: req.body.instagram,
+      linkedin_url: req.body.linkedin,
+      social_url: req.body.otherSocial
+    }
   };
-  businesses.push(newBusiness);
-  res.send({ message: "Thanks!" });
+  business.insertBusiness(businessData).then(response => {
+    res.send(response);
+  });
 });
 
 module.exports = router;

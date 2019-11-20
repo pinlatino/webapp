@@ -10,13 +10,25 @@ module.exports = {
     return knex("users").first();
   },
   insertUser: function(user) {
-    const { username, password, admin = false } = user;
-    console.log("in query", username, password);
+    const {
+      email,
+      password,
+      admin = false,
+      firstname,
+      lastname,
+      country,
+      tier
+    } = user;
+    console.log("in query", email, password);
     return knex("users")
       .insert({
-        username,
+        email,
         password,
-        admin
+        admin,
+        firstname,
+        lastname,
+        country,
+        tier
       })
       .returning("*");
   }

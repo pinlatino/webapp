@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
+import BusinessForm from "../components/BusinessForm";
 import fetch from "isomorphic-unfetch";
 import { withRouter } from "next/router";
 
-const Home = ({ businesses, router, authenticated }) => {
+const Home = ({ businesses, router, authenticated, user }) => {
   useEffect(() => {
-    console.log("businesses", businesses, router);
+    console.log("businesses", businesses, user);
     if (!authenticated) {
       router.push("/login");
     }
@@ -18,35 +19,16 @@ const Home = ({ businesses, router, authenticated }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/*     {businesses.map(b => {
-      return <div>{b.message}</div>;
-    })} */}
-
       <Nav />
 
-      <div className="hero">
-        <h1 className="title">Welcome to Next.js!</h1>
-        <p className="description">
-          To get started, edit <code>pages/index.js</code> and save to reload.
-        </p>
+      <BusinessForm />
 
-        <div className="row">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Learn more about Next.js in the documentation.</p>
-          </a>
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Next.js Learn &rarr;</h3>
-            <p>Learn about Next.js by following an interactive tutorial!</p>
-          </a>
-          <a
-            href="https://github.com/zeit/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Find other example boilerplates on the Next.js GitHub.</p>
-          </a>
-        </div>
+      <div className="hero">
+        <h1 className="title">Businesses</h1>
+        <p className="description">Pin Latino</p>
+        {businesses.map(b => {
+          return <div>{b.name}</div>;
+        })}
       </div>
 
       <style jsx>{`
@@ -101,11 +83,12 @@ const Home = ({ businesses, router, authenticated }) => {
 
 Home.getInitialProps = async () => {
   try {
+    const user = await fetch("/api/getuser");
     const response = await fetch("/api/businesses");
     console.log("response", response);
     const businesses = await response.json();
 
-    return { businesses, authenticated: true };
+    return { businesses, authenticated: true, user };
   } catch (e) {
     return { authenticated: false };
   }

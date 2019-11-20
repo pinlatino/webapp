@@ -4,18 +4,18 @@ const LocalStrategy = require("passport-local").Strategy;
 module.exports = (passport, knex) => {
   passport.use(
     "local-login",
-    new LocalStrategy((username, password, cb) => {
+    new LocalStrategy({ usernameField: "email" }, (username, password, cb) => {
       knex
         .table("users")
-        .first("id", "username", "password")
-        .where("username", username)
+        .first("id", "email", "password")
+        .where("email", username)
         .then(row => {
           if (row) {
             bcrypt.compare(password, row.password, function(err, res) {
               if (res) {
                 cb(null, {
                   id: row.id,
-                  username: row.username
+                  email: row.email
                 });
               } else {
                 cb(null, false);
@@ -33,7 +33,7 @@ module.exports = (passport, knex) => {
   passport.deserializeUser(({ id }, cb) => {
     knex
       .table("users")
-      .first("username", "id")
+      .first("email", "id")
       .where("id", parseInt(id, 10))
       .then(res => {
         cb(null, res);
